@@ -1,0 +1,19 @@
+PODS:
+  - MJThemeManager (0.1.0):
+    - ModuleCapability (~> 0.1.2)
+  - ModuleCapability (0.1.2)
+
+DEPENDENCIES:
+  - MJThemeManager (from `../`)
+
+EXTERNAL SOURCES:
+  MJThemeManager:
+    :path: ../
+
+SPEC CHECKSUMS:
+  MJThemeManager: bc65152c9d83748bcf9729f3e53ee6737ff31529
+  ModuleCapability: 35cea7154ff855362682e90ecf1be529a533c931
+
+PODFILE CHECKSUM: 6559df0f6a79efe863f9eb590420d492e427135b
+
+COCOAPODS: 1.0.1
