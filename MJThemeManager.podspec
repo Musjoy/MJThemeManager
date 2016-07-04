@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'MJThemeManager'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of MJThemeManager.'
+  s.summary          = 'This is a manager for themes.'
 
   s.homepage         = 'https://github.com/Musjoy/MJThemeManager'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
