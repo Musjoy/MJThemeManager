@@ -8,46 +8,67 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "UIView+Theme.h"
+#import "UITableViewCell+Theme.h"
 
 #ifndef PLIST_THEME_LIST
 #define PLIST_THEME_LIST @"theme_list"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 // ===================
-static NSString *const ThemeId;                     ///< 主题id
-static NSString *const ThemeThumb;                  ///< 主题缩略图
+extern NSString *const kThemeId;                        ///< 主题id
+extern NSString *const kThemeThumb;                     ///< 主题缩略图
+extern NSString *const kThemeBgImageName;               ///< 背景名称
 // 主要颜色
-static NSString *const ThemeStyle;                  ///< 主体风格<0-UIBarStyleDefault 1-UIBarStyleBlack>，默认 UIBarStyleDefault
-static NSString *const ThemeStatusStyle;            ///< 状态栏风格<0-UIStatusBarStyleDefault 1-UIStatusBarStyleLightContent>，默认 ThemeStyle
-static NSString *const ThemeMainColor;              ///< 主色调，默认 007AFF
-static NSString *const ThemeContrastColor;          ///< 反衬色，默认 FFFFFF
-static NSString *const ThemeBgColor;                ///< 背景色，默认 ThemeContrastColor
+extern NSString *const kThemeStyle;                     ///< 主体风格<0-UIBarStyleDefault 1-UIBarStyleBlack>，默认 UIBarStyleDefault
+extern NSString *const kThemeStatusStyle;               ///< 状态栏风格<0-UIStatusBarStyleDefault 1-UIStatusBarStyleLightContent>，默认 kThemeStyle
+extern NSString *const kThemeMainColor;                 ///< 主色调，默认 007AFF
+extern NSString *const kThemeContrastColor;             ///< 反衬色，默认 FFFFFF
+extern NSString *const kThemeBgColor;                   ///< 背景色，默认 kThemeContrastColor
+extern NSString *const kThemeHeaderBgColor;             ///< 内容背景色，默认 kThemeContrastColor
+extern NSString *const kThemeContentBgColor;            ///< 内容背景色，默认 [UIColor clearColor]
+extern NSString *const kThemeTextColor;                 ///< 普通文案颜色，默认 [UIColor blackColor]
 // TabBar颜色
-static NSString *const ThemeTabTintColor;           ///< TabBar主色调，默认 ThemeMainColor
-static NSString *const ThemeTabBgColor;             ///< TabBar背景色，默认 nil
-static NSString *const ThemeTabSelectBgColor;       ///< TabBar选中背景色，默认 nil
+extern NSString *const kThemeTabTintColor;              ///< TabBar主色调，默认 kThemeMainColor
+extern NSString *const kThemeTabBgColor;                ///< TabBar背景色，默认 [UIColor clearColor]
+extern NSString *const kThemeTabSelectBgColor;          ///< TabBar选中背景色，默认 nil
 // 导航栏颜色
-static NSString *const ThemeNavTintColor;           ///< 导航栏主色调，默认 ThemeMainColor
-static NSString *const ThemeNavBgColor;             ///< 导航栏背景色，默认［UIColor clearColor]
-static NSString *const ThemeNavTitleColor;          ///< 导航栏标题颜色，默认 ThemeNavTintColor
+extern NSString *const kThemeNavTintColor;              ///< 导航栏主色调，默认 kThemeMainColor
+extern NSString *const kThemeNavBgColor;                ///< 导航栏背景色，默认 nil
+extern NSString *const kThemeNavTitleColor;             ///< 导航栏标题颜色，默认 kThemeNavTintColor
 // 按钮颜色
-static NSString *const ThemeBtnTintColor;           ///< 按钮主色调，默认 ThemeMainColor
-static NSString *const ThemeBtnBgColor;             ///< 按钮有背景时的背景色，默认 ThemeMainColor
-static NSString *const ThemeBtnContrastColor;       ///< 按钮有背景时的激活色，默认 ThemeContrastColor
+extern NSString *const kThemeBtnTintColor;              ///< 按钮主色调，默认 kThemeMainColor
+extern NSString *const kThemeBtnTintColor2;             ///< 按钮第二主色调，默认 kThemeBtnTintColor
+extern NSString *const kThemeBtnBgColor;                ///< 按钮有背景时的背景色，默认 kThemeMainColor
+extern NSString *const kThemeBtnContrastColor;          ///< 按钮有背景时的激活色，默认 kThemeContrastColor
 // Cell颜色
-static NSString *const ThemeCellTintColor;          ///< TableViewCell的主色调，默认 ThemeMainColor
-static NSString *const ThemeCellBgColor;            ///< TableViewCell的背景色，默认 ThemeContrastColor
-static NSString *const ThemeCellTextColor;          ///< TableViewCell的标题颜色，默认 [UIColor blackColor]
-static NSString *const ThemeCellSubTextColor;       ///< TableViewCell的副标题颜色，默认 [UIColor lightGrayColor]
-static NSString *const ThemeCellLineColor;          ///< TableViewCell的分割线颜色，默认 [UIColor lightGrayColor]
+extern NSString *const kThemeCellTintColor;             ///< TableViewCell的主色调，默认 kThemeMainColor
+extern NSString *const kThemeCellBgColor;               ///< TableViewCell的背景色，默认 [UIColor clearColor]
+extern NSString *const kThemeCellTextColor;             ///< TableViewCell的标题颜色，默认 [UIColor blackColor]
+extern NSString *const kThemeCellSubTextColor;          ///< TableViewCell的副标题颜色，默认 [UIColor lightGrayColor]
+extern NSString *const kThemeCellBtnColor;              ///< TableViewCell的按钮颜色色，默认 kThemeBtnTintColor
+extern NSString *const kThemeCellLineColor;             ///< TableViewCell的分割线颜色，默认 [UIColor lightGrayColor]
+// 其他颜色
+extern NSString *const kThemeGlassColor;                ///< 毛玻璃，默认 nil
+extern NSString *const kThemeRefreshColor;              ///< 刷新图标的颜色，默认 kThemeMainColor
 
 // ===================
 
-static NSString *const kNoticThemeChanged;          ///< 主题变化通知
+extern NSString *const kNoticThemeChanged;              ///< 主题变化通知
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma mark -
 
 @interface MJThemeManager : NSObject
+
+@property (nonatomic, strong) NSDictionary *curTheme;       ///< 当前使用主题
+
 
 + (instancetype)shareInstance;
 
@@ -58,16 +79,25 @@ static NSString *const kNoticThemeChanged;          ///< 主题变化通知
 /// 当前状态栏风格<0-UIStatusBarStyleDefault 1-UIStatusBarStyleLightContent>
 + (NSInteger)curStatusStyle;
 
++ (UIImage *)curBgImage;
+
 + (UIColor *)colorFor:(NSString *)colorKey;
 
++ (UIImage *)createImageWithColor:(UIColor *)color withSize:(CGSize)size;
 
 #pragma mark - Theme Setting
 
 /// 主题列表
 - (NSArray *)themeList;
+/// 对于主题的缩略图
+- (UIImage *)thumbImageForTheme:(NSString *)aThemeId;
 /// 选中的主题ID
 - (NSString *)selectThemeId;
 /// 设置选中的主题ID
 - (void)setSelectThemeId:(NSString *)aThemeId;
 
+
+
 @end
+
+

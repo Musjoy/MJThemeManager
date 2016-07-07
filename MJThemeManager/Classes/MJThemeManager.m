@@ -10,38 +10,53 @@
 #if __has_include("FileSource.h")
 #import "FileSource.h"
 #endif
+#ifdef MODULE_CACHE_MANAGER
+#import "CacheManager.h"
+#endif
 
 #ifndef kDefualtSelectThemeId
 #define kDefualtSelectThemeId   @"DefualtSelectThemeId"
 #endif
 
 // ===================
-static NSString *const ThemeId                  = @"themeId";
-static NSString *const ThemeThumb               = @"themeThumb";
+NSString *const kThemeId                    = @"themeId";
+NSString *const kThemeThumb                 = @"themeThumb";
+NSString *const kThemeBgImageName           = @"ThemeBgImageName";
 // 主要颜色
-static NSString *const ThemeStyle               = @"ThemeStyle";
-static NSString *const ThemeStatusStyle         = @"ThemeStatusStyle";
-static NSString *const ThemeMainColor           = @"ThemeMainColor";
-static NSString *const ThemeContrastColor       = @"ThemeContrastColor";
-static NSString *const ThemeBgColor             = @"ThemeBgColor";
+NSString *const kThemeStyle                 = @"ThemeStyle";
+NSString *const kThemeStatusStyle           = @"ThemeStatusStyle";
+NSString *const kThemeMainColor             = @"ThemeMainColor";
+NSString *const kThemeContrastColor         = @"ThemeContrastColor";
+NSString *const kThemeBgColor               = @"ThemeBgColor";
+NSString *const kThemeHeaderBgColor         = @"ThemeHeaderBgColor";
+NSString *const kThemeContentBgColor        = @"ThemeContentBgColor";
+NSString *const kThemeTextColor             = @"ThemeTextColor";
 // TabBar颜色
-static NSString *const ThemeTabTintColor        = @"ThemeTabTintColor";
-static NSString *const ThemeTabBgColor          = @"ThemeTabBgColor";
-static NSString *const ThemeTabSelectBgColor    = @"ThemeTabSelectBgColor";
+NSString *const kThemeTabTintColor          = @"ThemeTabTintColor";
+NSString *const kThemeTabBgColor            = @"ThemeTabBgColor";
+NSString *const kThemeTabSelectBgColor      = @"ThemeTabSelectBgColor";
 // 导航栏颜色
-static NSString *const ThemeNavTintColor        = @"ThemeNavTintColor";
-static NSString *const ThemeNavBgColor          = @"ThemeNavBgColor";
-static NSString *const ThemeNavTitleColor       = @"ThemeNavTitleColor";
+NSString *const kThemeNavTintColor          = @"ThemeNavTintColor";
+NSString *const kThemeNavBgColor            = @"ThemeNavBgColor";
+NSString *const kThemeNavTitleColor         = @"ThemeNavTitleColor";
 // 按钮颜色
-static NSString *const ThemeBtnTintColor        = @"ThemeBtnTintColor";
-static NSString *const ThemeBtnBgColor          = @"ThemeBtnBgColor";
-static NSString *const ThemeBtnContrastColor    = @"ThemeBtnContrastColor";
+NSString *const kThemeBtnTintColor          = @"ThemeBtnTintColor";
+NSString *const kThemeBtnTintColor2         = @"ThemeBtnTintColor2";
+NSString *const kThemeBtnBgColor            = @"ThemeBtnBgColor";
+NSString *const kThemeBtnContrastColor      = @"ThemeBtnContrastColor";
 // Cell颜色
-static NSString *const ThemeCellTintColor       = @"ThemeCellTintColor";
-static NSString *const ThemeCellBgColor         = @"ThemeCellBgColor";
-static NSString *const ThemeCellTextColor       = @"ThemeCellTextColor";
-static NSString *const ThemeCellSubTextColor    = @"ThemeCellSubTextColor";
-static NSString *const ThemeCellLineColor       = @"ThemeCellLineColor";
+NSString *const kThemeCellTintColor         = @"ThemeCellTintColor";
+NSString *const kThemeCellBgColor           = @"ThemeCellBgColor";
+NSString *const kThemeCellTextColor         = @"ThemeCellTextColor";
+NSString *const kThemeCellSubTextColor      = @"ThemeCellSubTextColor";
+NSString *const kThemeCellBtnColor          = @"ThemeCellBtnColor";
+NSString *const kThemeCellLineColor         = @"ThemeCellLineColor";
+// 其他颜色
+NSString *const kThemeGlassColor            = @"ThemeGlassColor";
+NSString *const kThemeRefreshColor          = @"ThemeRefreshColor";
+
+
+NSString *const kNoticThemeChanged          = @"NoticThemeChanged";
 
 static MJThemeManager *s_themeManager   = nil;
 
@@ -51,7 +66,6 @@ static NSDictionary *s_defaultTheme    = nil;
 
 @property (nonatomic, strong) NSArray *arrThemes;
 @property (nonatomic, strong) NSMutableDictionary *dicThemes;
-@property (nonatomic, strong) NSDictionary *curTheme;
 @property (nonatomic, strong) NSString *curThemeId;
 @property (nonatomic, strong) NSMutableDictionary *dicColors;
 
@@ -95,58 +109,69 @@ static NSDictionary *s_defaultTheme    = nil;
     if (self) {
         
         s_defaultTheme =
-            @{ThemeId               : @"0",
-              ThemeStyle            : @0,
-              ThemeMainColor        : @"007AFF",
-              ThemeContrastColor    : @"FFFFFF",
-              ThemeBgColor          : ThemeContrastColor,
-              ThemeTabTintColor     : ThemeMainColor,
-//              ThemeTabBgColor       : ,
-//              ThemeTabSelectBgColor : ,
-              ThemeNavTintColor     : ThemeMainColor,
-//              ThemeNavBgColor       : ,
-              ThemeNavTitleColor    : ThemeNavTintColor,
-              ThemeBtnTintColor     : ThemeMainColor,
-              ThemeBtnBgColor       : ThemeMainColor,
-              ThemeBtnContrastColor : ThemeContrastColor,
-              ThemeCellTintColor    : ThemeMainColor,
-              ThemeCellBgColor      : ThemeContrastColor,
-              ThemeCellTextColor    : @"000000",
-              ThemeCellSubTextColor : @"666666",
-              ThemeCellLineColor    : @"999999"};
+            @{kThemeId                  : @"0",
+              kThemeStyle               : @0,
+              kThemeMainColor           : @"007AFF",
+              kThemeContrastColor       : @"FFFFFF",
+              kThemeBgColor             : kThemeContrastColor,
+              kThemeHeaderBgColor       : kThemeBgColor,
+              kThemeContentBgColor      : @"",
+              kThemeTextColor           : @"000000",
+              kThemeTabTintColor        : kThemeMainColor,
+              kThemeTabBgColor          : @"",
+//              kThemeTabSelectBgColor : ,
+              kThemeNavTintColor        : kThemeMainColor,
+//              kThemeNavBgColor       : @"",
+              kThemeNavTitleColor       : kThemeNavTintColor,
+              kThemeBtnTintColor        : kThemeMainColor,
+              kThemeBtnTintColor2       : kThemeBtnTintColor,
+              kThemeBtnBgColor          : kThemeMainColor,
+              kThemeBtnContrastColor    : kThemeContrastColor,
+              kThemeCellTintColor       : kThemeMainColor,
+              kThemeCellBgColor         : @"",
+              kThemeCellTextColor       : @"000000",
+              kThemeCellSubTextColor    : @"666666",
+              kThemeCellBtnColor        : kThemeBtnTintColor,
+              kThemeCellLineColor       : @"999999",
+//              kThemeGlassColor          : @"",
+              kThemeRefreshColor        : kThemeMainColor};
         
         _dicColors = [[NSMutableDictionary alloc] init];
+        _dicThemes = [[NSMutableDictionary alloc] init];
         
         // 加载主题文件
         _arrThemes = getPlistFileData(PLIST_THEME_LIST);
         if (_arrThemes.count > 0) {
             // 处理主题列表
             for (NSDictionary *aTheme in _arrThemes) {
-                if (aTheme[ThemeId]) {
-                    [_dicThemes setObject:aTheme forKey:aTheme[ThemeId]];
+                NSLog(@"%@", aTheme[kThemeId]);
+                if (aTheme[kThemeId]) {
+                    [_dicThemes setObject:aTheme forKey:aTheme[kThemeId]];
                 }
             }
             // 读取当前选中的主题
             NSString *selectThemeId = [[NSUserDefaults standardUserDefaults] objectForKey:kDefualtSelectThemeId];
             if (selectThemeId) {
                 _curTheme = _dicThemes[selectThemeId];
+            } else if (_arrThemes.count > 0) {
+                _curTheme = _arrThemes[0];
             }
         }
-        if (_curTheme && _curTheme[ThemeId]) {
+        if (_curTheme && _curTheme[kThemeId]) {
             NSMutableDictionary *aTheme = [s_defaultTheme mutableCopy];
             [aTheme addEntriesFromDictionary:_curTheme];
             _curTheme = aTheme;
         } else {
             _curTheme = s_defaultTheme;
         }
-        _curThemeId = _curTheme[ThemeId];
+        _curThemeId = _curTheme[kThemeId];
         
-        _curStyle = [_curTheme[ThemeStyle] integerValue];
+        _curStyle = [_curTheme[kThemeStyle] integerValue];
         if (_curStyle < 0 || _curStyle > 1) {
             _curStyle = 0;
         }
-        if (_curTheme[ThemeStatusStyle]) {
-            _curStatusStyle = [_curTheme[ThemeStatusStyle] integerValue];
+        if (_curTheme[kThemeStatusStyle]) {
+            _curStatusStyle = [_curTheme[kThemeStatusStyle] integerValue];
             if (_curStatusStyle < 0 || _curStatusStyle > 1) {
                 _curStatusStyle = _curStyle;
             }
@@ -170,9 +195,54 @@ static NSDictionary *s_defaultTheme    = nil;
     return [[self shareInstance] curStatusStyle];
 }
 
++ (UIImage *)curBgImage
+{
+    NSString *imageStr = [[self shareInstance] curTheme][kThemeBgImageName];
+    if (imageStr.length == 0) {
+        return nil;
+    }
+    UIImage *theImage = [UIImage imageNamed:imageStr];
+    if (theImage == nil) {
+        // 网络图片需下载
+#ifdef MODULE_CACHE_MANAGER
+        if (![imageStr hasPrefix:@"http"]) {
+#ifdef kServerUrl
+            if ([imageStr hasPrefix:@"/"]) {
+                imageStr = [kServerUrl stringByAppendingString:imageStr];
+            } else {
+                imageStr = [NSString stringWithFormat:@"%@/%@", kServerUrl, imageStr];;
+            }
+#else
+            return nil;
+#endif
+        }
+        theImage = [CacheManager getLocalFileWithUrl:imageStr fileType:eCacheFileImage completion:NULL];
+#endif
+    }
+    return theImage;
+}
+
 + (UIColor *)colorFor:(NSString *)colorKey
 {
     return [[self shareInstance] colorFor:colorKey];
+}
+
++ (UIImage *)createImageWithColor:(UIColor *)color withSize:(CGSize)size
+{
+    CGRect rect=CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    
+    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return theImage;
+}
+
++ (UIImage *)thumbImageForTheme:(NSString *)aThemeId
+{
+    
 }
 
 #pragma mark - Theme Setting
@@ -182,9 +252,40 @@ static NSDictionary *s_defaultTheme    = nil;
     return _arrThemes;
 }
 
+- (UIImage *)thumbImageForTheme:(NSString *)aThemeId
+{
+    NSDictionary *aTheme = _dicThemes[aThemeId];
+    if (!aTheme) {
+        return nil;
+    }
+    NSString *imageStr = aTheme[kThemeThumb];
+    if (imageStr.length == 0) {
+        return nil;
+    }
+    UIImage *theImage = [UIImage imageNamed:imageStr];
+    if (theImage == nil) {
+        // 网络图片需下载
+#ifdef MODULE_CACHE_MANAGER
+        if (![imageStr hasPrefix:@"http"]) {
+#ifdef kServerUrl
+            if ([imageStr hasPrefix:@"/"]) {
+                imageStr = [kServerUrl stringByAppendingString:imageStr];
+            } else {
+                imageStr = [NSString stringWithFormat:@"%@/%@", kServerUrl, imageStr];;
+            }
+#else
+            return nil;
+#endif
+        }
+        theImage = [CacheManager getLocalFileWithUrl:imageStr fileType:eCacheFileImage completion:NULL];
+#endif
+    }
+    return theImage;
+}
+
 - (NSString *)selectThemeId
 {
-    return _curTheme[ThemeId];
+    return _curTheme[kThemeId];
 }
 
 - (void)setSelectThemeId:(NSString *)aThemeId
@@ -201,7 +302,21 @@ static NSDictionary *s_defaultTheme    = nil;
     [newTheme addEntriesFromDictionary:aTheme];
     _curTheme = newTheme;
     [_dicColors removeAllObjects];
-    _curThemeId = newTheme[ThemeId];
+    _curThemeId = newTheme[kThemeId];
+    _curStyle = [_curTheme[kThemeStyle] integerValue];
+    if (_curStyle < 0 || _curStyle > 1) {
+        _curStyle = 0;
+    }
+    if (_curTheme[kThemeStatusStyle]) {
+        _curStatusStyle = [_curTheme[kThemeStatusStyle] integerValue];
+        if (_curStatusStyle < 0 || _curStatusStyle > 1) {
+            _curStatusStyle = _curStyle;
+        }
+    } else {
+        _curStatusStyle = _curStyle;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:_curThemeId forKey:kDefualtSelectThemeId];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNoticThemeChanged object:_curTheme];
 }
@@ -228,6 +343,9 @@ static NSDictionary *s_defaultTheme    = nil;
         } else {
             theColor = [self.class colorFromHexRGB:theColorStr];
         }
+    }
+    if (theColor) {
+        [_dicColors setObject:theColor forKey:colorKey];
     }
     return theColor;
 }
