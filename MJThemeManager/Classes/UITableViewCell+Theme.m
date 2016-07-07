@@ -17,6 +17,14 @@
     [self setBackgroundColor:[MJThemeManager colorFor:kThemeCellBgColor]];
     [self.textLabel setTextColor:[MJThemeManager colorFor:kThemeCellTextColor]];
     [self.detailTextLabel setTextColor:[MJThemeManager colorFor:kThemeCellSubTextColor]];
+    UIColor *hlBgColor = [MJThemeManager colorFor:kThemeCellHLBgColor];
+    if (hlBgColor) {
+        UIView *bgView = [[UIView alloc] initWithFrame:self.bounds];
+        [bgView setBackgroundColor:hlBgColor];
+        self.selectedBackgroundView = bgView;    
+    } else {
+        self.selectedBackgroundView = nil;
+    }
 }
 
 @end

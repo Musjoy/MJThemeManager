@@ -47,6 +47,7 @@ extern NSString *const kThemeBtnContrastColor;          ///< 按钮有背景时�
 // Cell颜色
 extern NSString *const kThemeCellTintColor;             ///< TableViewCell的主色调，默认 kThemeMainColor
 extern NSString *const kThemeCellBgColor;               ///< TableViewCell的背景色，默认 [UIColor clearColor]
+extern NSString *const kThemeCellHLBgColor;             ///< TableViewCell的高亮背景色, 默认 nil
 extern NSString *const kThemeCellTextColor;             ///< TableViewCell的标题颜色，默认 [UIColor blackColor]
 extern NSString *const kThemeCellSubTextColor;          ///< TableViewCell的副标题颜色，默认 [UIColor lightGrayColor]
 extern NSString *const kThemeCellBtnColor;              ///< TableViewCell的按钮颜色色，默认 kThemeBtnTintColor
