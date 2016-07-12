@@ -55,6 +55,7 @@ NSString *const kThemeCellLineColor         = @"ThemeCellLineColor";
 // 其他颜色
 NSString *const kThemeGlassColor            = @"ThemeGlassColor";
 NSString *const kThemeRefreshColor          = @"ThemeRefreshColor";
+NSString *const kThemeSearchBarBgColor      = @"ThemeSearchBarBgColor";
 
 
 NSString *const kNoticThemeChanged          = @"NoticThemeChanged";
@@ -129,7 +130,7 @@ static NSDictionary *s_defaultTheme    = nil;
               kThemeContentBgColor      : @"",
               kThemeTextColor           : @"000000",
               kThemeTabTintColor        : kThemeMainColor,
-              kThemeTabBgColor          : @"",
+//              kThemeTabBgColor          : @"",
 //              kThemeTabSelectBgColor : ,
               kThemeNavTintColor        : kThemeMainColor,
 //              kThemeNavBgColor       : @"",

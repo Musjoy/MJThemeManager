@@ -33,7 +33,7 @@ extern NSString *const kThemeContentBgColor;            ///< 内容背景色，�
 extern NSString *const kThemeTextColor;                 ///< 普通文案颜色，默认 [UIColor blackColor]
 // TabBar颜色
 extern NSString *const kThemeTabTintColor;              ///< TabBar主色调，默认 kThemeMainColor
-extern NSString *const kThemeTabBgColor;                ///< TabBar背景色，默认 [UIColor clearColor]
+extern NSString *const kThemeTabBgColor;                ///< TabBar背景色，默认 nil
 extern NSString *const kThemeTabSelectBgColor;          ///< TabBar选中背景色，默认 nil
 // 导航栏颜色
 extern NSString *const kThemeNavTintColor;              ///< 导航栏主色调，默认 kThemeMainColor
@@ -55,6 +55,7 @@ extern NSString *const kThemeCellLineColor;             ///< TableViewCell的分
 // 其他颜色
 extern NSString *const kThemeGlassColor;                ///< 毛玻璃，默认 nil
 extern NSString *const kThemeRefreshColor;              ///< 刷新图标的颜色，默认 kThemeMainColor
+extern NSString *const kThemeSearchBarBgColor;          ///< 搜索框的背景颜色，默认 nil
 
 // ===================
 
