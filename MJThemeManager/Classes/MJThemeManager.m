@@ -13,6 +13,9 @@
 #ifdef MODULE_CACHE_MANAGER
 #import "CacheManager.h"
 #endif
+#ifdef HEADER_CONTROLLER_MANAGER
+#import HEADER_CONTROLLER_MANAGER
+#endif
 
 #ifndef kDefualtSelectThemeId
 #define kDefualtSelectThemeId   @"DefualtSelectThemeId"
@@ -21,6 +24,7 @@
 // ===================
 NSString *const kThemeId                    = @"themeId";
 NSString *const kThemeThumb                 = @"themeThumb";
+NSString *const kThemeName                  = @"themeName";
 NSString *const kThemeBgImageName           = @"ThemeBgImageName";
 // 主要颜色
 NSString *const kThemeStyle                 = @"ThemeStyle";
@@ -155,12 +159,19 @@ static NSDictionary *s_defaultTheme    = nil;
         _arrThemes = getPlistFileData(PLIST_THEME_LIST);
         if (_arrThemes.count > 0) {
             // 处理主题列表
+            NSMutableArray *arrAvailable = [[NSMutableArray alloc] init];
             for (NSDictionary *aTheme in _arrThemes) {
                 NSLog(@"%@", aTheme[kThemeId]);
                 if (aTheme[kThemeId]) {
-                    [_dicThemes setObject:aTheme forKey:aTheme[kThemeId]];
+                    if ([_dicThemes objectForKey:aTheme[kThemeId]]) {
+                        LogError(@"There are two same themeId : (%@)", aTheme[kThemeId]);
+                    } else {
+                        [_dicThemes setObject:aTheme forKey:aTheme[kThemeId]];
+                        [arrAvailable addObject:aTheme];
+                    }
                 }
             }
+            _arrThemes = arrAvailable;
             // 读取当前选中的主题
             NSString *selectThemeId = [[NSUserDefaults standardUserDefaults] objectForKey:kDefualtSelectThemeId];
             if (selectThemeId) {
@@ -274,25 +285,24 @@ static NSDictionary *s_defaultTheme    = nil;
     if (imageStr.length == 0) {
         return nil;
     }
-    UIImage *theImage = [UIImage imageNamed:imageStr];
-    if (theImage == nil) {
-        // 网络图片需下载
-#ifdef MODULE_CACHE_MANAGER
-        if (![imageStr hasPrefix:@"http"]) {
+    UIImage *theImage = [self getImageForImageName:imageStr completion:NULL];
+    return theImage;
+}
+
+- (NSString *)fullImageNameFor:(NSString *)aImageName
+{
+    NSString *fullName = aImageName;
+    if (![fullName hasPrefix:@"http"]) {
 #ifdef kServerUrl
-            if ([imageStr hasPrefix:@"/"]) {
-                imageStr = [kServerUrl stringByAppendingString:imageStr];
-            } else {
-                imageStr = [NSString stringWithFormat:@"%@/%@", kServerUrl, imageStr];;
-            }
-#else
-            return nil;
-#endif
+        if ([fullName hasPrefix:@"/"]) {
+            fullName = [kServerUrl stringByAppendingString:fullName];
+        } else {
+            fullName = [NSString stringWithFormat:@"%@/%@", kServerUrl, fullName];
         }
-        theImage = [CacheManager getLocalFileWithUrl:imageStr fileType:eCacheFileImage completion:NULL];
 #endif
     }
-    return theImage;
+    return fullName;
+
 }
 
 - (NSString *)selectThemeId
@@ -333,6 +343,79 @@ static NSDictionary *s_defaultTheme    = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNoticThemeChanged object:_curTheme];
 }
 
+- (void)selectThemeWith:(NSString *)aThemeId completion:(ThemeSelectBlock)completion
+{
+    // 首先判断改主题是否完整
+    [self checkAllImageInTheme:aThemeId completion:^(BOOL isSucced) {
+        if (isSucced) {
+            [self setSelectThemeId:aThemeId];
+        }
+        completion(isSucced);
+    }];
+}
+
+- (void)checkAllImageInTheme:(NSString *)aThemeId completion:(ThemeSelectBlock)completion
+{
+    NSDictionary *aTheme = [_dicThemes objectForKey:aThemeId];
+    if (!aTheme) {
+        if (completion) {
+            completion(NO);
+        }
+        return;
+    }
+    __block int imageCount = 0;
+    __block BOOL isBlockCalled = NO;
+    __block BOOL haveLoading = NO;
+    for (NSString *aKey in aTheme.allKeys) {
+        if ([aKey hasSuffix:@"ImageName"]) {
+            // 有一张图片
+            imageCount++;
+            UIImage *aImage = [self getImageForImageName:aTheme[aKey] completion:^(BOOL isSucced) {
+                if (isSucced) {
+                    imageCount--;
+                    if (imageCount <= 0) {
+                        isBlockCalled = YES;
+                        if (completion) {
+                            completion(YES);
+                        }
+#ifdef THEControllerManager
+                        if (haveLoading) {
+                            [THEControllerManager stopLoading];
+                        }
+#endif
+                    }
+                } else if (!isBlockCalled) {
+                    isBlockCalled = YES;
+                    if (completion) {
+                        completion(NO);
+                    }
+#ifdef THEControllerManager
+                    if (haveLoading) {
+                        [THEControllerManager stopLoading];
+                    }
+#endif
+                }
+            }];
+            if (aImage) {
+                imageCount--;
+            }
+        }
+    }
+
+    if (imageCount == 0) {
+        isBlockCalled = YES;
+        if (completion) {
+            completion(YES);
+        }
+    } else {
+#ifdef THEControllerManager
+        haveLoading = YES;
+        [THEControllerManager startLoading:@"Downloading theme..."];
+#endif
+    }
+}
+
+
 #pragma mark - Private
 
 - (UIColor *)colorFor:(NSString *)colorKey
@@ -362,7 +445,35 @@ static NSDictionary *s_defaultTheme    = nil;
     return theColor;
 }
 
-
+- (UIImage *)getImageForImageName:(NSString *)aImageName completion:(ThemeSelectBlock)completion
+{
+    UIImage *theImage = [UIImage imageNamed:aImageName];
+    if (theImage == nil) {
+        // 网络图片需下载
+#ifdef MODULE_CACHE_MANAGER
+        if (![aImageName hasPrefix:@"http"]) {
+#ifdef kServerUrl
+            if ([aImageName hasPrefix:@"/"]) {
+                aImageName = [kServerUrl stringByAppendingString:aImageName];
+            } else {
+                aImageName = [NSString stringWithFormat:@"%@/%@", kServerUrl, aImageName];
+            }
+#else
+            if (completion) {
+                completion(NO);
+            }
+            return nil;
+#endif
+        }
+        theImage = [CacheManager getLocalFileWithUrl:aImageName fileType:eCacheFileImage completion:^(BOOL isSucceed, NSString *message, NSObject *data) {
+            if (completion) {
+                completion(isSucceed);
+            }
+        }];
+#endif
+    }
+    return theImage;
+}
 
 
 @end

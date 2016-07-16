@@ -21,6 +21,7 @@ extern "C" {
 // ===================
 extern NSString *const kThemeId;                        ///< 主题id
 extern NSString *const kThemeThumb;                     ///< 主题缩略图
+extern NSString *const kThemeName;                      ///< 主题名称
 extern NSString *const kThemeBgImageName;               ///< 背景名称
 // 主要颜色
 extern NSString *const kThemeStyle;                     ///< 主体风格<0-UIBarStyleDefault 1-UIBarStyleBlack>，默认 UIBarStyleDefault
@@ -65,6 +66,9 @@ extern NSString *const kNoticThemeChanged;              ///< 主题变化通知
 }
 #endif
 
+typedef void (^ThemeSelectBlock)(BOOL isSucced);
+
+
 #pragma mark -
 
 @interface MJThemeManager : NSObject
@@ -85,7 +89,11 @@ extern NSString *const kNoticThemeChanged;              ///< 主题变化通知
 
 + (UIColor *)colorFor:(NSString *)colorKey;
 
++ (UIColor *)colorFromHexRGB:(NSString *)inColorString;
+
 + (UIImage *)createImageWithColor:(UIColor *)color withSize:(CGSize)size;
+
+
 
 #pragma mark - Theme Setting
 
@@ -93,13 +101,15 @@ extern NSString *const kNoticThemeChanged;              ///< 主题变化通知
 - (NSArray *)themeList;
 /// 对于主题的缩略图
 - (UIImage *)thumbImageForTheme:(NSString *)aThemeId;
+/// 获取完整的图片路径
+- (NSString *)fullImageNameFor:(NSString *)aImageName;
 /// 选中的主题ID
 - (NSString *)selectThemeId;
 /// 设置选中的主题ID
 - (void)setSelectThemeId:(NSString *)aThemeId;
-
+/// 设置新主题
+- (void)selectThemeWith:(NSString *)aThemeId completion:(ThemeSelectBlock)completion;
 
 
 @end
-
 
