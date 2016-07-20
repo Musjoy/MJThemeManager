@@ -156,7 +156,7 @@ static NSDictionary *s_defaultTheme    = nil;
         _dicThemes = [[NSMutableDictionary alloc] init];
         
         // 加载主题文件
-        _arrThemes = getPlistFileData(PLIST_THEME_LIST);
+        _arrThemes = getFileData(PLIST_THEME_LIST);
         if (_arrThemes.count > 0) {
             // 处理主题列表
             NSMutableArray *arrAvailable = [[NSMutableArray alloc] init];
