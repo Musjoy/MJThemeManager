@@ -11,8 +11,8 @@
 #import "UIView+Theme.h"
 #import "UITableViewCell+Theme.h"
 
-#ifndef PLIST_THEME_LIST
-#define PLIST_THEME_LIST @"theme_list"
+#ifndef FILE_NAME_THEME_LIST
+#define FILE_NAME_THEME_LIST @"theme_list"
 #endif
 
 #ifdef __cplusplus
