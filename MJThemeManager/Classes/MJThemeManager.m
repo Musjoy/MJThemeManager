@@ -99,7 +99,8 @@ static NSDictionary *s_defaultTheme    = nil;
     blueByte = (unsigned char) (colorCode  >> (length-24)); // masks off high bits
     float alpha = 1.0;
     if (length > 24) {
-        unsigned char alphaByte = (unsigned char) (colorCode - (colorCode  >> (length-24)));
+        int dLength = length-24;
+        unsigned char alphaByte = (unsigned char) (colorCode - ((colorCode  >> dLength) << dLength));
         if (length == 28) {
             alpha = (float)alphaByte / 0xf;
         } else if (length == 32) {
