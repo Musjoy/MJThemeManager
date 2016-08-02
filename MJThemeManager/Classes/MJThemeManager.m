@@ -146,12 +146,20 @@ static NSDictionary *s_defaultTheme    = nil;
               kThemeBtnContrastColor    : kThemeContrastColor,
               kThemeCellTintColor       : kThemeMainColor,
               kThemeCellBgColor         : @"",
-              kThemeCellTextColor       : @"000000",
+              kThemeCellTextColor       : kThemeTextColor,
               kThemeCellSubTextColor    : @"666666",
               kThemeCellBtnColor        : kThemeBtnTintColor,
               kThemeCellLineColor       : @"999999",
 //              kThemeGlassColor          : @"",
               kThemeRefreshColor        : kThemeMainColor};
+        
+        // 读取本地可能存在的默认主题设置
+        NSDictionary *dicDefault = getFileData(FILE_NAME_THEME_CONFIG);
+        if (dicDefault) {
+            NSMutableDictionary *newDefaultTheme = [s_defaultTheme mutableCopy];
+            [newDefaultTheme  addEntriesFromDictionary:dicDefault];
+            s_defaultTheme = newDefaultTheme;
+        }
         
         _dicColors = [[NSMutableDictionary alloc] init];
         _dicThemes = [[NSMutableDictionary alloc] init];
