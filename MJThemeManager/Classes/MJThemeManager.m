@@ -11,7 +11,7 @@
 #import "FileSource.h"
 #endif
 #ifdef MODULE_CACHE_MANAGER
-#import "CacheManager.h"
+#import "MJCacheManager.h"
 #endif
 #ifdef HEADER_CONTROLLER_MANAGER
 #import HEADER_CONTROLLER_MANAGER
@@ -248,7 +248,7 @@ static NSDictionary *s_defaultTheme    = nil;
             return nil;
 #endif
         }
-        theImage = [CacheManager getLocalFileWithUrl:imageStr fileType:eCacheFileImage completion:NULL];
+        theImage = [MJCacheManager getLocalFileWithUrl:imageStr fileType:eCacheFileImage completion:NULL];
 #endif
     }
     return theImage;
@@ -474,7 +474,7 @@ static NSDictionary *s_defaultTheme    = nil;
             return nil;
 #endif
         }
-        theImage = [CacheManager getLocalFileWithUrl:aImageName fileType:eCacheFileImage completion:^(BOOL isSucceed, NSString *message, NSObject *data) {
+        theImage = [MJCacheManager getLocalFileWithUrl:aImageName fileType:eCacheFileImage completion:^(BOOL isSucceed, NSString *message, NSObject *data) {
             if (completion) {
                 completion(isSucceed);
             }
