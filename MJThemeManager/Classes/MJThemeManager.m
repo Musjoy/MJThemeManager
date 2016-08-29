@@ -16,9 +16,16 @@
 #ifdef HEADER_CONTROLLER_MANAGER
 #import HEADER_CONTROLLER_MANAGER
 #endif
+#ifdef HEADER_UM_ANALYSE
+#import HEADER_UM_ANALYSE
+#endif
 
 #ifndef kDefualtSelectThemeId
 #define kDefualtSelectThemeId   @"DefualtSelectThemeId"
+#endif
+
+#ifndef stat_ChangeTheme
+#define stat_ChangeTheme        @"ChangeTheme"
 #endif
 
 // ===================
@@ -357,6 +364,7 @@ static NSDictionary *s_defaultTheme    = nil;
     // 首先判断改主题是否完整
     [self checkAllImageInTheme:aThemeId completion:^(BOOL isSucced) {
         if (isSucced) {
+            triggerEventStr(stat_ChangeTheme, aThemeId);
             [self setSelectThemeId:aThemeId];
         }
         completion(isSucced);
