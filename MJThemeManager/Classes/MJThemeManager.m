@@ -63,6 +63,12 @@ NSString *const kThemeCellTextColor         = @"ThemeCellTextColor";
 NSString *const kThemeCellSubTextColor      = @"ThemeCellSubTextColor";
 NSString *const kThemeCellBtnColor          = @"ThemeCellBtnColor";
 NSString *const kThemeCellLineColor         = @"ThemeCellLineColor";
+// 广告颜色设置
+NSString *const kThemeAdTitleColor          = @"ThemeAdTitleColor";
+NSString *const kThemeAdTextColor           = @"ThemeAdTextColor";
+NSString *const kThemeAdDetailColor         = @"ThemeAdDetailColor";
+NSString *const kThemeAdBtnColor            = @"ThemeAdBtnColor";
+NSString *const kThemeAdBtnBgColor          = @"ThemeAdBtnBgColor";
 // 其他颜色
 NSString *const kThemeGlassColor            = @"ThemeGlassColor";
 NSString *const kThemeRefreshColor          = @"ThemeRefreshColor";
@@ -158,7 +164,12 @@ static NSDictionary *s_defaultTheme    = nil;
               kThemeCellBtnColor        : kThemeBtnTintColor,
               kThemeCellLineColor       : @"999999",
 //              kThemeGlassColor          : @"",
-              kThemeRefreshColor        : kThemeMainColor};
+              kThemeRefreshColor        : kThemeMainColor,
+              kThemeAdTitleColor        : kThemeCellTextColor,
+              kThemeAdTextColor         : kThemeCellSubTextColor,
+              kThemeAdDetailColor       : kThemeAdTitleColor,
+              kThemeAdBtnColor          : @"FFFFFF",
+              kThemeAdBtnBgColor        : @"5DC75F",};
         
         // 读取本地可能存在的默认主题设置
         NSDictionary *dicDefault = getFileData(FILE_NAME_THEME_CONFIG);

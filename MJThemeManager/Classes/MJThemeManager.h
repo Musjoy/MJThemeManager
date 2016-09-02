@@ -55,8 +55,14 @@ extern NSString *const kThemeCellBgColor;               ///< TableViewCell的背
 extern NSString *const kThemeCellHLBgColor;             ///< TableViewCell的高亮背景色, 默认 nil
 extern NSString *const kThemeCellTextColor;             ///< TableViewCell的标题颜色，默认 kThemeTextColor
 extern NSString *const kThemeCellSubTextColor;          ///< TableViewCell的副标题颜色，默认 [UIColor lightGrayColor]
-extern NSString *const kThemeCellBtnColor;              ///< TableViewCell的按钮颜色色，默认 kThemeBtnTintColor
+extern NSString *const kThemeCellBtnColor;              ///< TableViewCell的按钮颜色，默认 kThemeBtnTintColor
 extern NSString *const kThemeCellLineColor;             ///< TableViewCell的分割线颜色，默认 [UIColor lightGrayColor]
+// 广告颜色设置
+extern NSString *const kThemeAdTitleColor;              ///< 广告的标题颜色，默认 kThemeCellTextColor
+extern NSString *const kThemeAdTextColor;               ///< 广告文案的颜色，默认 kThemeCellSubTextColor
+extern NSString *const kThemeAdDetailColor;             ///< 广告内容的颜色，默认 kThemeAdTitleColor
+extern NSString *const kThemeAdBtnColor;                ///< 广告按钮文字颜色，默认 [UIColor whiteColor]
+extern NSString *const kThemeAdBtnBgColor;              ///< 广告按钮背景颜色，默认 5DC75F
 // 其他颜色
 extern NSString *const kThemeGlassColor;                ///< 毛玻璃，默认 nil
 extern NSString *const kThemeRefreshColor;              ///< 刷新图标的颜色，默认 kThemeMainColor
