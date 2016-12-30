@@ -10,6 +10,9 @@
 
 @interface UIView (Theme)
 
+- (NSString *)themeIdentifier;
+
 - (void)reloadTheme;
+
 
 @end

@@ -37,6 +37,7 @@ NSString *const kThemeBgImageName           = @"ThemeBgImageName";
 NSString *const kThemeStyle                 = @"ThemeStyle";
 NSString *const kThemeStatusStyle           = @"ThemeStatusStyle";
 NSString *const kThemeMainColor             = @"ThemeMainColor";
+NSString *const kThemeTintColor             = @"ThemeTintColor";
 NSString *const kThemeContrastColor         = @"ThemeContrastColor";
 NSString *const kThemeBgColor               = @"ThemeBgColor";
 NSString *const kThemeHeaderBgColor         = @"ThemeHeaderBgColor";
@@ -145,30 +146,31 @@ static NSDictionary *s_defaultTheme    = nil;
         s_defaultTheme =
             @{kThemeId                  : @"0",
               kThemeStyle               : @0,
-              kThemeMainColor           : @"007AFF",
+              kThemeTintColor           : @"007AFF",
+              kThemeMainColor           : kThemeTintColor,
               kThemeContrastColor       : @"FFFFFF",
               kThemeBgColor             : kThemeContrastColor,
               kThemeHeaderBgColor       : kThemeBgColor,
               kThemeContentBgColor      : @"",
               kThemeTextColor           : @"000000",
-              kThemeTabTintColor        : kThemeMainColor,
+              kThemeTabTintColor        : kThemeTintColor,
 //              kThemeTabBgColor          : @"",
 //              kThemeTabSelectBgColor : ,
-              kThemeNavTintColor        : kThemeMainColor,
+              kThemeNavTintColor        : kThemeTintColor,
 //              kThemeNavBgColor       : @"",
               kThemeNavTitleColor       : kThemeNavTintColor,
-              kThemeBtnTintColor        : kThemeMainColor,
+              kThemeBtnTintColor        : kThemeTintColor,
               kThemeBtnTintColor2       : kThemeBtnTintColor,
-              kThemeBtnBgColor          : kThemeMainColor,
+              kThemeBtnBgColor          : kThemeTintColor,
               kThemeBtnContrastColor    : kThemeContrastColor,
-              kThemeCellTintColor       : kThemeMainColor,
+              kThemeCellTintColor       : kThemeTintColor,
               kThemeCellBgColor         : @"",
               kThemeCellTextColor       : kThemeTextColor,
               kThemeCellSubTextColor    : @"666666",
               kThemeCellBtnColor        : kThemeBtnTintColor,
               kThemeCellLineColor       : @"999999",
 //              kThemeGlassColor          : @"",
-              kThemeRefreshColor        : kThemeMainColor,
+              kThemeRefreshColor        : kThemeTintColor,
               kThemeAdTitleColor        : kThemeCellTextColor,
               kThemeAdTextColor         : kThemeCellSubTextColor,
               kThemeAdDetailColor       : kThemeAdTitleColor,
@@ -281,7 +283,15 @@ static NSDictionary *s_defaultTheme    = nil;
     return [[self shareInstance] colorFor:colorKey];
 }
 
-+ (UIImage *)createImageWithColor:(UIColor *)color withSize:(CGSize)size
++ (UIColor *)colorFor:(NSString *)colorKey andIdentifier:(NSString *)themeIdentifier
+{
+    if (themeIdentifier.length > 0) {
+        colorKey = [colorKey stringByAppendingFormat:@"-%@", themeIdentifier];
+    }
+    return [[self shareInstance] colorFor:colorKey];
+}
+
++ (UIImage *)createImageWithColor:(UIColor *)color andSize:(CGSize)size
 {
     CGRect rect=CGRectMake(0.0f, 0.0f, size.width, size.height);
     UIGraphicsBeginImageContext(rect.size);
@@ -457,11 +467,29 @@ static NSDictionary *s_defaultTheme    = nil;
     }
     UIColor *theColor = [_dicColors objectForKey:colorKey];
     if (theColor) {
+        if ([theColor isKindOfClass:[NSNull class]]) {
+            return nil;
+        }
         return theColor;
     }
     NSString *theColorStr = _curTheme[colorKey];
     if (theColorStr == nil) {
-        return nil;
+        // 截取字符串判断
+        NSRange aRange = [colorKey rangeOfString:@"-"];
+        if (aRange.length > 0) {
+            NSString *strFirstColor = [colorKey substringToIndex:aRange.location];
+            NSString *strSecondColor = _curTheme[strFirstColor];
+            // 判读上一级颜色是否存在
+            if (strSecondColor.length > 0 && [strSecondColor hasSuffix:@"Color"]) {
+                NSString *strNewColorKey = [strSecondColor stringByAppendingString:[strFirstColor substringFromIndex:aRange.length]];
+                NSString *theColor = [self colorFor:strNewColorKey];
+            }
+            if (theColor == nil) {
+                // 去掉尾巴继续查找
+                aRange = [colorKey rangeOfString:@"-" options:NSBackwardsSearch];
+                theColor = [self colorFor:[colorKey substringToIndex:aRange.location]];
+            }
+        }
     } else if (theColorStr.length == 0) {
         theColor = [UIColor clearColor];
     } else {
@@ -473,6 +501,8 @@ static NSDictionary *s_defaultTheme    = nil;
     }
     if (theColor) {
         [_dicColors setObject:theColor forKey:colorKey];
+    } else {
+        [_dicColors setObject:[NSNull null] forKey:colorKey];
     }
     return theColor;
 }

@@ -11,9 +11,18 @@
 
 @implementation UIView (Theme)
 
+- (NSString *)themeIdentifier
+{
+    UIResponder *nextResponder = self.nextResponder;
+    if ([nextResponder respondsToSelector:@selector(themeIdentifier)]) {
+        return ((UIView *)nextResponder).themeIdentifier;
+    }
+    return nil;
+}
+
 - (void)reloadTheme
 {
-    [self setTintColor:[MJThemeManager colorFor:kThemeMainColor]];
+    [self setTintColor:[MJThemeManager colorFor:kThemeTintColor andIdentifier:self.themeIdentifier]];
 }
 
 @end

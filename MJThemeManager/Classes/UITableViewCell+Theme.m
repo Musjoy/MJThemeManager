@@ -13,11 +13,12 @@
 
 - (void)reloadTheme
 {
-    [self setTintColor:[MJThemeManager colorFor:kThemeMainColor]];
-    [self setBackgroundColor:[MJThemeManager colorFor:kThemeCellBgColor]];
-    [self.textLabel setTextColor:[MJThemeManager colorFor:kThemeCellTextColor]];
-    [self.detailTextLabel setTextColor:[MJThemeManager colorFor:kThemeCellSubTextColor]];
-    UIColor *hlBgColor = [MJThemeManager colorFor:kThemeCellHLBgColor];
+    NSString *themeIdentifier = [self themeIdentifier];
+    [self setTintColor:[MJThemeManager colorFor:kThemeTintColor andIdentifier:themeIdentifier]];
+    [self setBackgroundColor:[MJThemeManager colorFor:kThemeCellBgColor andIdentifier:themeIdentifier]];
+    [self.textLabel setTextColor:[MJThemeManager colorFor:kThemeCellTextColor andIdentifier:themeIdentifier]];
+    [self.detailTextLabel setTextColor:[MJThemeManager colorFor:kThemeCellSubTextColor andIdentifier:themeIdentifier]];
+    UIColor *hlBgColor = [MJThemeManager colorFor:kThemeCellHLBgColor andIdentifier:themeIdentifier];
     if (hlBgColor) {
         UIView *bgView = [[UIView alloc] initWithFrame:self.bounds];
         [bgView setBackgroundColor:hlBgColor];
