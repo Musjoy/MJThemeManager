@@ -7,6 +7,7 @@
 //
 
 #import "MJThemeManager.h"
+#import HEADER_SERVER_URL
 #if __has_include("FileSource.h")
 #import "FileSource.h"
 #endif
@@ -129,7 +130,7 @@ static NSDictionary *s_defaultTheme    = nil;
     return result;
 }
 
-+ (instancetype)shareInstance
++ (instancetype)sharedInstance
 {
     static dispatch_once_t once_patch;
     dispatch_once(&once_patch, ^() {
@@ -243,17 +244,17 @@ static NSDictionary *s_defaultTheme    = nil;
 
 + (NSInteger)curStyle
 {
-    return [[self shareInstance] curStyle];
+    return [[self sharedInstance] curStyle];
 }
 
 + (NSInteger)curStatusStyle
 {
-    return [[self shareInstance] curStatusStyle];
+    return [[self sharedInstance] curStatusStyle];
 }
 
 + (UIImage *)curBgImage
 {
-    NSString *imageStr = [[self shareInstance] curTheme][kThemeBgImageName];
+    NSString *imageStr = [[self sharedInstance] curTheme][kThemeBgImageName];
     if (imageStr.length == 0) {
         return nil;
     }
@@ -280,7 +281,7 @@ static NSDictionary *s_defaultTheme    = nil;
 
 + (UIColor *)colorFor:(NSString *)colorKey
 {
-    return [[self shareInstance] colorFor:colorKey];
+    return [[self sharedInstance] colorFor:colorKey];
 }
 
 + (UIColor *)colorFor:(NSString *)colorKey andIdentifier:(NSString *)themeIdentifier
@@ -288,7 +289,7 @@ static NSDictionary *s_defaultTheme    = nil;
     if (themeIdentifier.length > 0) {
         colorKey = [colorKey stringByAppendingFormat:@"-%@", themeIdentifier];
     }
-    return [[self shareInstance] colorFor:colorKey];
+    return [[self sharedInstance] colorFor:colorKey];
 }
 
 + (UIImage *)createImageWithColor:(UIColor *)color andSize:(CGSize)size

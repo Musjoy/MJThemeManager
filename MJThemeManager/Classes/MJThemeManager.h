@@ -87,7 +87,7 @@ typedef void (^ThemeSelectBlock)(BOOL isSucced);
 @property (nonatomic, strong) NSDictionary *curTheme;       ///< 当前使用主题
 
 
-+ (instancetype)shareInstance;
++ (instancetype)sharedInstance;
 
 #pragma mark - Theme Use
 
