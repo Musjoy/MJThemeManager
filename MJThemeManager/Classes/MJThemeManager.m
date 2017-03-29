@@ -101,7 +101,7 @@ static NSDictionary *s_defaultTheme    = nil;
 {
     UIColor *result = nil;
     unsigned int colorCode = 0;
-    int length = inColorString.length;
+    NSInteger length = inColorString.length;
     if (length > 8) {
         inColorString = [inColorString substringFromIndex:length-8];
         length = 8;
@@ -273,7 +273,7 @@ static NSDictionary *s_defaultTheme    = nil;
             return nil;
 #endif
         }
-        theImage = [MJCacheManager getLocalFileWithUrl:imageStr fileType:eCacheFileImage completion:NULL];
+        theImage = (UIImage *)[MJCacheManager getLocalFileWithUrl:imageStr fileType:eCacheFileImage completion:NULL];
 #endif
     }
     return theImage;
@@ -307,7 +307,7 @@ static NSDictionary *s_defaultTheme    = nil;
 
 + (UIImage *)thumbImageForTheme:(NSString *)aThemeId
 {
-    
+    return [[self sharedInstance] thumbImageForTheme:aThemeId];
 }
 
 #pragma mark - Theme Setting
@@ -483,7 +483,7 @@ static NSDictionary *s_defaultTheme    = nil;
             // 判读上一级颜色是否存在
             if (strSecondColor.length > 0 && [strSecondColor hasSuffix:@"Color"]) {
                 NSString *strNewColorKey = [strSecondColor stringByAppendingString:[strFirstColor substringFromIndex:aRange.length]];
-                NSString *theColor = [self colorFor:strNewColorKey];
+                theColor = [self colorFor:strNewColorKey];
             }
             if (theColor == nil) {
                 // 去掉尾巴继续查找
@@ -528,7 +528,7 @@ static NSDictionary *s_defaultTheme    = nil;
             return nil;
 #endif
         }
-        theImage = [MJCacheManager getLocalFileWithUrl:aImageName fileType:eCacheFileImage completion:^(BOOL isSucceed, NSString *message, NSObject *data) {
+        theImage = (UIImage *)[MJCacheManager getLocalFileWithUrl:aImageName fileType:eCacheFileImage completion:^(BOOL isSucceed, NSString *message, NSObject *data) {
             if (completion) {
                 completion(isSucceed);
             }
